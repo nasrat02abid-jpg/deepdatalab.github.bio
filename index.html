@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Data Lab | Data Analytics & Visualization</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060F1E;
+    --bg2: #0C1E30;
+    --card: #112030;
+    --blue: #2B7FE0;
+    --blue2: #1A5FAA;
+    --teal: #1D9E75;
+    --amber: #EF9F27;
+    --text: #E8F4FF;
+    --muted: #7BAED4;
+    --border: #1A3550;
+    --grid: #0A1828;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── Grid bg ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(6,15,30,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--teal); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--blue);
+    color: white !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+  }
+
+  .nav-cta:hover { background: var(--blue2) !important; }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: none;
+    padding: 120px 60px 80px;
+  }
+
+  section.active { display: block; }
+
+  /* ── HERO ── */
+  #home {
+    display: none;
+    align-items: center;
+    padding-top: 140px;
+  }
+
+  #home.active {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 6vw, 84px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -2px;
+  }
+
+  .hero-title .blue { color: var(--blue); }
+  .hero-title .teal { color: var(--teal); }
+
+  .hero-sub {
+    font-size: 20px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 40px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 80px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--blue2); transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+  .hero-stats {
+    display: flex;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item { text-align: left; }
+
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--blue);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Skills strip */
+  .skills-strip {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    width: 100%;
+  }
+
+  .skills-strip p {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .skills-pills {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    transition: all 0.2s;
+  }
+
+  .pill:hover { border-color: var(--blue); color: var(--blue); }
+  .pill.blue { border-color: var(--blue); color: var(--blue); }
+  .pill.teal { border-color: var(--teal); color: var(--teal); }
+  .pill.amber { border-color: var(--amber); color: var(--amber); }
+
+  /* ── SECTION HEADER ── */
+  .sec-header { margin-bottom: 60px; }
+
+  .sec-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sec-tag::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  .sec-title {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+
+  .sec-title span { color: var(--blue); }
+
+  .sec-desc {
+    margin-top: 16px;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* ── PORTFOLIO GRID ── */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+
+  .portfolio-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .portfolio-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(43,127,224,0.15);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+  }
+
+  .card-body { padding: 24px; }
+
+  .card-tag {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    color: var(--teal);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .card-tools {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tool-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--blue);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+  .service-card.teal-accent::before { background: var(--teal); }
+  .service-card.amber-accent::before { background: var(--amber); }
+
+  .service-icon {
+    font-size: 36px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .service-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .service-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .service-list li {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .service-list li::before {
+    content: '→';
+    color: var(--blue);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Pricing */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 960px;
+  }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 28px;
+    transition: all 0.3s;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--blue);
+    background: linear-gradient(135deg, #112030, #0C1E30);
+    transform: scale(1.04);
+    box-shadow: 0 20px 60px rgba(43,127,224,0.2);
+  }
+
+  .pricing-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .pricing-label.featured { color: var(--blue); }
+
+  .pricing-price {
+    font-size: 48px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 4px;
+  }
+
+  .pricing-price sup {
+    font-size: 24px;
+    vertical-align: top;
+    margin-top: 10px;
+    display: inline-block;
+  }
+
+  .pricing-period {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .pricing-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .pricing-features li {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pricing-features li::before {
+    content: '✓';
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  /* ── CONTACT ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .contact-info { display: flex; flex-direction: column; gap: 32px; }
+
+  .contact-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .contact-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .contact-val {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .contact-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+  }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--blue); }
+
+  .form-group textarea { height: 120px; resize: vertical; }
+
+  .form-group select option { background: var(--bg2); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer p {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--blue); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up { animation: fadeUp 0.6s ease forwards; }
+  .fade-up-2 { animation: fadeUp 0.6s ease 0.1s forwards; opacity: 0; }
+  .fade-up-3 { animation: fadeUp 0.6s ease 0.2s forwards; opacity: 0; }
+  .fade-up-4 { animation: fadeUp 0.6s ease 0.3s forwards; opacity: 0; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .live-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: inline-block;
+    animation: pulse 2s infinite;
+    margin-right: 8px;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 100px 24px 60px; }
+    footer { padding: 30px 24px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-card.featured { transform: none; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showSection('home')">DEEP<span>DATA</span>LAB</a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showSection('home')">Home</a></li>
+    <li><a href="#" onclick="showSection('portfolio')">Portfolio</a></li>
+    <li><a href="#" onclick="showSection('services')">Services</a></li>
+    <li><a href="#" onclick="showSection('contact')" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active">
+  <div class="hero-tag fade-up"><span class="live-dot"></span>Available for projects</div>
+  <h1 class="hero-title fade-up-2">
+    Data Analytics<br>
+    <span class="blue">&amp; Visualization</span><br>
+    <span class="teal">Specialist</span>
+  </h1>
+  <p class="hero-sub fade-up-3">
+    I help businesses turn raw data into powerful dashboards and actionable insights using Power BI, Python, Excel, SQL and HTML.
+  </p>
+  <div class="hero-btns fade-up-4">
+    <a href="#" class="btn-primary" onclick="showSection('portfolio')">View My Work</a>
+    <a href="#" class="btn-outline" onclick="showSection('contact')">Get In Touch</a>
+  </div>
+  <div class="hero-stats fade-up-4">
+    <div class="stat-item">
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Projects Delivered</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4+</span>
+      <span class="stat-label">Tools Mastered</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Client Satisfaction</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">2+</span>
+      <span class="stat-label">Years Experience</span>
+    </div>
+  </div>
+  <div class="skills-strip fade-up-4">
+    <p>Tech Stack</p>
+    <div class="skills-pills">
+      <span class="pill blue">Power BI</span>
+      <span class="pill teal">Python</span>
+      <span class="pill amber">SQL</span>
+      <span class="pill">Excel</span>
+      <span class="pill">HTML</span>
+      <span class="pill">Pandas</span>
+      <span class="pill">Matplotlib</span>
+      <span class="pill">Plotly</span>
+      <span class="pill">Seaborn</span>
+      <span class="pill">Meta Ads</span>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="sec-header">
+    <div class="sec-tag">My Work</div>
+    <h2 class="sec-title">Featured <span>Projects</span></h2>
+    <p class="sec-desc">Real dashboards built for real clients — from real estate marketing to sales analytics.</p>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-card">
+      <div class="card-img">📊</div>
+      <div class="card-body">
+        <div class="card-tag">Real Estate · Marketing</div>
+        <h3 class="card-title">LMAR Marketing — Sales & Ads Analytics</h3>
+        <p class="card-desc">Comprehensive sales and Facebook Ads analytics dashboard for LMAR Marketing Real Estate Company tracking leads, reach, impressions and spend.</p>
+        <div class="card-tools">
+          <span class="tool-badge">Power BI</span>
+          <span class="tool-badge">Excel</span>
+          <span class="tool-badge">Meta Ads</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="card-img">🏢</div>
+      <div class="card-body">
+        <div class="card-tag">Real Estate · Lead Gen</div>
+        <h3 class="card-title">Real Estate Lead Generation & Meta Ads Campaign</h3>
+        <p class="card-desc">Managed and optimized Facebook and Instagram ad campaigns for a real estate firm with full performance tracking and reporting.</p>
+        <div class="card-tools">
+          <span class="tool-badge">Meta Ads</span>
+          <span class="tool-badge">HTML</span>
+          <span class="tool-badge">Analytics</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="card-img">💹</div>
+      <div class="card-body">
+        <div class="card-tag">Retail · Sales</div>
+        <h3 class="card-title">Sales & Profit Analytics Dashboard</h3>
+        <p class="card-desc">Interactive Excel dashboard with KPI cards, profit by year, top customers ranking, sales by category and geographic map visualization.</p>
+        <div class="card-tools">
+          <span class="tool-badge">Excel</span>
+          <span class="tool-badge">Pivot Tables</span>
+          <span class="tool-badge">Charts</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="card-img">📱</div>
+      <div class="card-body">
+        <div class="card-tag">Marketing · Facebook Ads</div>
+        <h3 class="card-title">Facebook Ads Monthly Dashboard</h3>
+        <p class="card-desc">Monthly Facebook Ads tracking dashboard for LMAR Marketing monitoring leads, reach, impressions, total spend and cost per engagement.</p>
+        <div class="card-tools">
+          <span class="tool-badge">Excel</span>
+          <span class="tool-badge">Facebook Ads</span>
+          <span class="tool-badge">Slicers</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="card-img">🗺️</div>
+      <div class="card-body">
+        <div class="card-tag">Retail · Regional</div>
+        <h3 class="card-title">Regional Sales & Product Analytics</h3>
+        <p class="card-desc">Multi-region sales dashboard with product breakdown, monthly trends and regional performance comparison across East, North, South and West.</p>
+        <div class="card-tools">
+          <span class="tool-badge">Excel</span>
+          <span class="tool-badge">Pivot Charts</span>
+          <span class="tool-badge">Slicers</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="card-img">🐍</div>
+      <div class="card-body">
+        <div class="card-tag">Python · Visualization</div>
+        <h3 class="card-title">Python Sales Performance Dashboard</h3>
+        <p class="card-desc">Full Python dashboard with KPI cards, revenue trends, category breakdown, regional comparison and correlation heatmap using Matplotlib and Seaborn.</p>
+        <div class="card-tools">
+          <span class="tool-badge">Python</span>
+          <span class="tool-badge">Matplotlib</span>
+          <span class="tool-badge">Seaborn</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-header">
+    <div class="sec-tag">What I Do</div>
+    <h2 class="sec-title">My <span>Services</span></h2>
+    <p class="sec-desc">End-to-end data analytics solutions tailored to your business needs.</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-icon">📊</span>
+      <h3 class="service-title">Power BI Dashboards</h3>
+      <p class="service-desc">Interactive business intelligence dashboards with real-time data connections and stunning visualizations.</p>
+      <ul class="service-list">
+        <li>KPI tracking dashboards</li>
+        <li>Sales & revenue reports</li>
+        <li>Marketing analytics</li>
+        <li>Real estate performance</li>
+      </ul>
+    </div>
+    <div class="service-card teal-accent">
+      <span class="service-icon">🐍</span>
+      <h3 class="service-title">Python Visualization</h3>
+      <p class="service-desc">Custom Python dashboards and charts using Matplotlib, Plotly, Seaborn and Streamlit.</p>
+      <ul class="service-list">
+        <li>Interactive Plotly dashboards</li>
+        <li>Statistical visualizations</li>
+        <li>Automated reporting</li>
+        <li>Streamlit web apps</li>
+      </ul>
+    </div>
+    <div class="service-card amber-accent">
+      <span class="service-icon">📗</span>
+      <h3 class="service-title">Excel Dashboards</h3>
+      <p class="service-desc">Professional Excel dashboards with pivot tables, slicers and advanced charts for business reporting.</p>
+      <ul class="service-list">
+        <li>Pivot table dashboards</li>
+        <li>Interactive slicers</li>
+        <li>Financial reporting</li>
+        <li>Sales performance</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🌐</span>
+      <h3 class="service-title">HTML Dashboards</h3>
+      <p class="service-desc">Custom interactive web-based dashboards that run in any browser without software installation.</p>
+      <ul class="service-list">
+        <li>Custom web dashboards</li>
+        <li>Real estate analytics</li>
+        <li>Agent leaderboards</li>
+        <li>Campaign tracking</li>
+      </ul>
+    </div>
+    <div class="service-card teal-accent">
+      <span class="service-icon">🗄️</span>
+      <h3 class="service-title">SQL & Data Analysis</h3>
+      <p class="service-desc">Database querying, data extraction and transformation to power your analytics projects.</p>
+      <ul class="service-list">
+        <li>SQL query writing</li>
+        <li>Data cleaning</li>
+        <li>Database reporting</li>
+        <li>Data transformation</li>
+      </ul>
+    </div>
+    <div class="service-card amber-accent">
+      <span class="service-icon">📣</span>
+      <h3 class="service-title">Marketing Analytics</h3>
+      <p class="service-desc">Meta Ads and digital marketing analytics with campaign performance dashboards and ROI reporting.</p>
+      <ul class="service-list">
+        <li>Meta Ads dashboards</li>
+        <li>Campaign performance</li>
+        <li>Lead tracking</li>
+        <li>Cost per engagement</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="sec-header" style="margin-top:80px">
+    <div class="sec-tag">Pricing</div>
+    <h2 class="sec-title">Simple <span>Packages</span></h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-label">Starter</div>
+      <div class="pricing-price"><sup>$</sup>30</div>
+      <div class="pricing-period">per project</div>
+      <ul class="pricing-features">
+        <li>1 page dashboard</li>
+        <li>Up to 5 charts</li>
+        <li>KPI cards</li>
+        <li>2 revisions</li>
+        <li>3 day delivery</li>
+      </ul>
+      <a href="#" class="btn-outline" onclick="showSection('contact')" style="width:100%;text-align:center">Get Started</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-label featured">⭐ Most Popular</div>
+      <div class="pricing-price"><sup>$</sup>60</div>
+      <div class="pricing-period">per project</div>
+      <ul class="pricing-features">
+        <li>Multi-page dashboard</li>
+        <li>Up to 10 charts</li>
+        <li>Filters & slicers</li>
+        <li>Data cleaning</li>
+        <li>Executive summary</li>
+        <li>3 revisions</li>
+        <li>5 day delivery</li>
+      </ul>
+      <a href="#" class="btn-primary" onclick="showSection('contact')" style="width:100%;text-align:center">Get Started</a>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-label">Enterprise</div>
+      <div class="pricing-price"><sup>$</sup>120</div>
+      <div class="pricing-period">per project</div>
+      <ul class="pricing-features">
+        <li>Full analytics solution</li>
+        <li>Unlimited charts</li>
+        <li>All tools combined</li>
+        <li>Full data cleaning</li>
+        <li>Executive summary</li>
+        <li>Unlimited revisions</li>
+        <li>7 day delivery</li>
+      </ul>
+      <a href="#" class="btn-outline" onclick="showSection('contact')" style="width:100%;text-align:center">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-header">
+    <div class="sec-tag">Get In Touch</div>
+    <h2 class="sec-title">Let's Work <span>Together</span></h2>
+    <p class="sec-desc">Have a project in mind? Send a message and I'll get back to you within 24 hours.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val">nasratabid@gmail.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌍</div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-val">Peshawar, Pakistan</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">💼</div>
+        <div>
+          <div class="contact-label">Fiverr</div>
+          <div class="contact-val">@deepdatalab</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">⚡</div>
+        <div>
+          <div class="contact-label">Response Time</div>
+          <div class="contact-val">Within 24 hours</div>
+        </div>
+      </div>
+      <div style="margin-top:16px; padding:24px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+        <p style="font-size:13px; color:var(--muted); line-height:1.7;">
+          💡 <strong style="color:var(--text)">Pro tip:</strong> Before ordering on Fiverr, message me first to discuss your project. I'll make sure you get exactly what you need at the right package!
+        </p>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Muhammad Ali">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <select>
+          <option value="">Select a service</option>
+          <option>Power BI Dashboard</option>
+          <option>Python Visualization</option>
+          <option>Excel Dashboard</option>
+          <option>HTML Dashboard</option>
+          <option>SQL & Data Analysis</option>
+          <option>Marketing Analytics</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Project Details</label>
+        <textarea placeholder="Describe your project, data type, and what insights you need..."></textarea>
+      </div>
+      <button class="btn-primary" style="width:100%" onclick="alert('Message sent! I will get back to you within 24 hours.')">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Deep Data Lab · @deepdatalab · Peshawar, Pakistan</p>
+  <div class="footer-links">
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('portfolio')">Portfolio</a>
+    <a href="#" onclick="showSection('services')">Services</a>
+    <a href="#" onclick="showSection('contact')">Contact</a>
+  </div>
+</footer>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
